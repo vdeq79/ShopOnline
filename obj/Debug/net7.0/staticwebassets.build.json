@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "YSoLuzt3oR/bqEvMJliGn36FGaG3wPxgZ6ZxSGllsFM=",
+  "Source": "CP Blazor",
+  "BasePath": "_content/CP Blazor",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "CP Blazor\\wwwroot",
+      "Source": "CP Blazor",
+      "ContentRoot": "C:\\Users\\x.zheng\\Desktop\\ConstraintProgramming\\Blazor\\CP Blazor\\wwwroot\\",
+      "BasePath": "_content/CP Blazor",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\x.zheng\\Desktop\\ConstraintProgramming\\Blazor\\CP Blazor\\wwwroot\\css\\site.css",
+      "SourceId": "CP Blazor",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\x.zheng\\Desktop\\ConstraintProgramming\\Blazor\\CP Blazor\\wwwroot\\",
+      "BasePath": "_content/CP Blazor",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    }
+  ]
+}
