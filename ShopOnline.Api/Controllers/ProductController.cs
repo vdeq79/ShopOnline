@@ -37,9 +37,10 @@ namespace ShopOnline.Api.Controllers
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                  "Error retrieving data from the database");
             }
 
         }
