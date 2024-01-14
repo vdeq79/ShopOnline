@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopOnline.Api.Data;
 using ShopOnline.Api.Entities;
+using ShopOnline.Api.Repositories.Contracts;
 using ShopOnline.Models.Dtos;
 
-namespace ShopOnline.Api.Repositories.Contracts
+namespace ShopOnline.Api.Repositories
 {
     public class ShoppingCartRepository : IShoppingCartRepository
     {
@@ -16,16 +17,16 @@ namespace ShopOnline.Api.Repositories.Contracts
 
         private async Task<bool> CartItemExists(int cartId, int productId)
         {
-            return await this.shopOnlineDbContext.CartItems.AnyAsync(c => c.CartId == cartId && c.ProductId == productId);
+            return await shopOnlineDbContext.CartItems.AnyAsync(c => c.CartId == cartId && c.ProductId == productId);
         }
 
 
         public async Task<CartItem> AddItem(CartItemToAddDto cartItemToAddDto)
         {
-            if(await CartItemExists(cartItemToAddDto.CartId, cartItemToAddDto.ProductId) == false)
+            if (await CartItemExists(cartItemToAddDto.CartId, cartItemToAddDto.ProductId) == false)
             {
 
-                var item = await (from product in this.shopOnlineDbContext.Products
+                var item = await (from product in shopOnlineDbContext.Products
                                   where product.Id == cartItemToAddDto.ProductId
                                   select new CartItem
                                   {
@@ -36,8 +37,8 @@ namespace ShopOnline.Api.Repositories.Contracts
 
                 if (item != null)
                 {
-                    var result = await this.shopOnlineDbContext.CartItems.AddAsync(item);
-                    await this.shopOnlineDbContext.SaveChangesAsync();
+                    var result = await shopOnlineDbContext.CartItems.AddAsync(item);
+                    await shopOnlineDbContext.SaveChangesAsync();
                     return result.Entity;
                 }
 
@@ -46,15 +47,23 @@ namespace ShopOnline.Api.Repositories.Contracts
             return null;
         }
 
-        public Task<CartItem> DeleteItem(int id)
+        public async Task<CartItem> DeleteItem(int id)
         {
-            throw new NotImplementedException();
+            var item = await this.shopOnlineDbContext.CartItems.FindAsync(id);
+
+            if (item != null)
+            {
+                this.shopOnlineDbContext.CartItems.Remove(item);
+                await this.shopOnlineDbContext.SaveChangesAsync();
+            }
+
+            return item;
         }
 
         public async Task<CartItem> GetItem(int id)
         {
-            return await (from cart in this.shopOnlineDbContext.CartItems
-                          join cartItem in this.shopOnlineDbContext.CartItems
+            return await (from cart in shopOnlineDbContext.CartItems
+                          join cartItem in shopOnlineDbContext.CartItems
                           on cart.Id equals cartItem.CartId
                           where cartItem.Id == id
                           select new CartItem
@@ -68,8 +77,8 @@ namespace ShopOnline.Api.Repositories.Contracts
 
         public async Task<IEnumerable<CartItem>> GetItems(int userId)
         {
-            return await (from cart in this.shopOnlineDbContext.Carts
-                          join cartItem in this.shopOnlineDbContext.CartItems
+            return await (from cart in shopOnlineDbContext.Carts
+                          join cartItem in shopOnlineDbContext.CartItems
                           on cart.Id equals cartItem.CartId
                           where cart.UserId == userId
                           select new CartItem
@@ -85,5 +94,7 @@ namespace ShopOnline.Api.Repositories.Contracts
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
