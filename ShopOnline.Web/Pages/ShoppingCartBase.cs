@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using ShopOnline.Models.Dtos;
 using ShopOnline.Web.Services;
 using ShopOnline.Web.Services.Contracts;
+using System.Globalization;
 
 namespace ShopOnline.Web.Pages
 {
@@ -111,7 +112,7 @@ namespace ShopOnline.Web.Pages
 
         private void SetTotalPrice()
         {
-            TotalPrice = this.ShoppingCartItems.Sum(p=>p.TotalPrice).ToString("C");
+            TotalPrice = this.ShoppingCartItems.Sum(p=>p.TotalPrice).ToString("C", CultureInfo.GetCultureInfo("en-Us"));
         }
 
         private void SetTotalQuantity()

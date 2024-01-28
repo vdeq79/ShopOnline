@@ -11,7 +11,7 @@
                         @item.Name
                     </h5>
                     <p class="card-text">
-                        <b>@item.Price.ToString("C")</b>
+                        <b>@item.Price.ToString("C", CultureInfo.GetCultureInfo("en-Us"))</b>
                     </p>
                 </div>
             </div>
