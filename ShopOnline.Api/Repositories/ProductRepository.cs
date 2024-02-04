@@ -28,19 +28,27 @@ namespace ShopOnline.Api.Repositories
 
         public async Task<Product> GetItem(int id)
         {
-            var product = await shopOnlineDbContext.Products.FindAsync(id);
+            var product = await shopOnlineDbContext.Products
+                                .Include(p => p.ProductCategory)
+                                .SingleOrDefaultAsync(p => p.Id == id);
+
             return product;
         }
 
         public async Task<IEnumerable<Product>> GetItems()
         {
-            var products = await shopOnlineDbContext.Products.ToListAsync();
+            var products = await shopOnlineDbContext.Products
+                                 .Include(p => p.ProductCategory).ToListAsync();
+
             return products;
         }
 
         public async Task<IEnumerable<Product>> GetItemsByCategory(int id)
         {
-            var category = await shopOnlineDbContext.Products.Where(c => c.CategoryId == id).ToListAsync();
+            var category = await shopOnlineDbContext.Products
+                                .Include(p => p.ProductCategory)
+                                .Where(c => c.CategoryId == id).ToListAsync();
+
             return category;
         }
     }
