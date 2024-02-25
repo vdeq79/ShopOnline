@@ -23,14 +23,14 @@ namespace ShopOnline.Api.Repositories
 
         public async Task<CartItem> AddItem(CartItemToAddDto cartItemToAddDto)
         {
+            //If not exists add to Cart
             if (await CartItemExists(cartItemToAddDto.CartId, cartItemToAddDto.ProductId) == false)
             {
 
                 var item = await (from product in shopOnlineDbContext.Products
                                   where product.Id == cartItemToAddDto.ProductId
                                   select new CartItem
-                                  {
-                                      CartId = cartItemToAddDto.CartId,
+                                  {   CartId = cartItemToAddDto.CartId,
                                       ProductId = product.Id,
                                       Qty = cartItemToAddDto.Qty,
                                   }).SingleOrDefaultAsync();
@@ -40,6 +40,19 @@ namespace ShopOnline.Api.Repositories
                     var result = await shopOnlineDbContext.CartItems.AddAsync(item);
                     await shopOnlineDbContext.SaveChangesAsync();
                     return result.Entity;
+                }
+
+            }
+            //Else add 1 Qty to same item
+            else
+            {
+                var item = await this.shopOnlineDbContext.CartItems.SingleOrDefaultAsync(
+                                c => c.CartId == cartItemToAddDto.CartId && c.ProductId == cartItemToAddDto.ProductId);
+
+                if (item != null)
+                {
+                    var result = await UpdateQty(item.Id, new CartItemQtyUpdateDto { CartItemId = item.Id, Qty = item.Qty + 1 });
+                    return result;
                 }
 
             }

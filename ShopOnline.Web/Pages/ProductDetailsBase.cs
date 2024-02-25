@@ -51,7 +51,21 @@ namespace ShopOnline.Web.Pages
 
                 if(cartItemDto != null)
                 {
-                    ShoppingCartItems.Add(cartItemDto);
+                    int index = ShoppingCartItems.FindIndex(c => c.Id == cartItemDto.Id);
+
+                    Console.WriteLine(ShoppingCartItems.First().Qty);
+
+                    if (index != -1)
+                    {
+                        ShoppingCartItems[index] = cartItemDto;
+                    }
+                    else
+                    {
+                        ShoppingCartItems.Add(cartItemDto);
+                    }
+
+                    Console.WriteLine(ShoppingCartItems.First().Qty);
+
                     await ManageCartItemsLocalStorageService.SaveCollection(ShoppingCartItems);
                 }
 
