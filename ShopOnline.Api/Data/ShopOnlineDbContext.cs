@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ShopOnline.Api.Entities;
 
 namespace ShopOnline.Api.Data
@@ -264,14 +265,18 @@ namespace ShopOnline.Api.Data
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 1,
-                UserName = "Bob"
-
+                UserName = "Bob",
+                Email = "Bob@gmail.com",
+                PasswordSalt = " ",
+                PasswordHash = " "
             });
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 2,
-                UserName = "Sarah"
-
+                UserName = "Sarah",
+                Email = "Sarah@gmail.com",
+                PasswordSalt = " ",
+                PasswordHash = " "
             });
 
             //Create Shopping Cart for Users
