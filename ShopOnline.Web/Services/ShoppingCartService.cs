@@ -11,6 +11,7 @@ namespace ShopOnline.Web.Services
     {
         private readonly HttpClient httpClient;
 
+        //Now assigned from CartMenu.Razor to update ShoppingCart
         public event Action<int> OnShoppingCartChanged;
 
         public ShoppingCartService(HttpClient httpClient)

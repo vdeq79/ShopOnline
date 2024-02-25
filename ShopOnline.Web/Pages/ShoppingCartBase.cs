@@ -66,7 +66,7 @@ namespace ShopOnline.Web.Pages
 
                     CartChanged();
 
-                    await MakeUpdateQtyButtonVisible(id, false);
+                    //await MakeUpdateQtyButtonVisible(id, false);
 
                 }
                 else
