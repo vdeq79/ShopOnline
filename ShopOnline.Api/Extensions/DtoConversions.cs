@@ -81,5 +81,10 @@ namespace ShopOnline.Api.Extensions
                         IconCSS = productCategory.IconCSS
                     }).ToList();
         }
+
+        public static UserDto ConvertToDto(this User user)
+        {
+            return new UserDto(user.Id, user.UserName, user.Email);
+        }
     }
 }

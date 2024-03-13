@@ -318,6 +318,7 @@ namespace ShopOnline.Api.Data
                 IconCSS = "fas fa-shoe-prints"
             });
 
+            modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
 
         }
 
