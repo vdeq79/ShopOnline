@@ -1,7 +1,8 @@
 ﻿using ShopOnline.Models.Dtos;
+using ShopOnline.Web.Services.Contracts;
 using System.Net.Http.Json;
 
-namespace ShopOnline.Web.Services.Contracts
+namespace ShopOnline.Web.Services
 {
     public class UserService : IUserService
     {
@@ -16,13 +17,13 @@ namespace ShopOnline.Web.Services.Contracts
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<LoginDto>("api/Login", loginDto);
+                var response = await httpClient.PostAsJsonAsync("api/User/Login", loginDto);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return default(UserDto);
+                        return default;
                     }
 
                     return await response.Content.ReadFromJsonAsync<UserDto>();
@@ -43,13 +44,13 @@ namespace ShopOnline.Web.Services.Contracts
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<RegisterDto>("api/Register", registerDto);
+                var response = await httpClient.PostAsJsonAsync("api/User/Register", registerDto);
 
                 if (response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return default(UserDto);
+                        return default;
                     }
 
                     return await response.Content.ReadFromJsonAsync<UserDto>();

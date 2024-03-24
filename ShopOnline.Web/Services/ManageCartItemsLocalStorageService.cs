@@ -8,12 +8,14 @@ namespace ShopOnline.Web.Services
     {
         private readonly ILocalStorageService localStorageService;
         private readonly IShoppingCartService shoppingCartService;
+        private readonly IManageUserService manageUserService;
         private const string key = "CartItemCollection";
 
-        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService)
+        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService)
         {
             this.localStorageService = localStorageService;
             this.shoppingCartService = shoppingCartService;
+            this.manageUserService = manageUserService;
         }
 
         public async Task<List<CartItemDto>> GetCollection()
@@ -33,9 +35,14 @@ namespace ShopOnline.Web.Services
 
         private async Task<List<CartItemDto>> AddCollection()
         {
-            var shoppingCartCollection = await this.shoppingCartService.GetItems(HardCoded.UserId);
-                
-            if(shoppingCartCollection != null)
+            List<CartItemDto> shoppingCartCollection = new List<CartItemDto>();
+
+            if (this.manageUserService.GetCurrentUser() != null)
+            {
+                shoppingCartCollection = await this.shoppingCartService.GetItems(this.manageUserService.GetCurrentUser().Id);
+            }
+
+            if (shoppingCartCollection != null)
             {
                 await this.localStorageService.SetItemAsync(key, shoppingCartCollection);
             }

@@ -48,7 +48,7 @@ namespace ShopOnline.Api.Controllers
 
                 if(user == null)
                 {
-                    return NotFound();
+                    return NoContent();
                 }
 
                 var userDto = user.ConvertToDto();
