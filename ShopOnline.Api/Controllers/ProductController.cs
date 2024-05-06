@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShopOnline.Api.Repositories.Contracts;
 using ShopOnline.Models.Dtos;
 using ShopOnline.Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShopOnline.Api.Controllers
 {
@@ -19,6 +20,7 @@ namespace ShopOnline.Api.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetItems()
         {
             try

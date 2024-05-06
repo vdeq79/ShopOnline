@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using ShopOnline.Models.Dtos;
 using ShopOnline.Web.Services.Contracts;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ShopOnline.Web.Pages
 {
     public class LoginBase : ComponentBase
     {
+        [CascadingParameter]
+        public HttpContext? HttpContext {  get; set; } 
 
         [Parameter]
         public string Email { get; set; }

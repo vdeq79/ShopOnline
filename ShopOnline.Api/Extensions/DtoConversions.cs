@@ -82,9 +82,9 @@ namespace ShopOnline.Api.Extensions
                     }).ToList();
         }
 
-        public static UserDto ConvertToDto(this User user)
+        public static UserDto ConvertToDto(this User user, string token, int exprisIn)
         {
-            return new UserDto(user.Id, user.UserName, user.Email);
+            return new UserDto(user.Id, user.UserName, user.Email, nameof(user.Role), token, exprisIn, DateTime.Now);
         }
     }
 }

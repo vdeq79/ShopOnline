@@ -2,12 +2,12 @@
 @inject IShoppingCartService shoppingCartService
 @inject IManageUserService manageUserService
 
-@if(manageUserService.GetCurrentUser() != null){
+<AuthorizeView>
     <a href="ShoppingCart" class="btn btn-info">
         <i class="oi oi-cart"></i>&nbsp;Cart
         <span class="badge bg-dark">@shoppingCartItemCount</span>
     </a>
-}
+</AuthorizeView>
 
 
 @code {

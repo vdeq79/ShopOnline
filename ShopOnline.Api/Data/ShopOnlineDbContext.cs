@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShopOnline.Api.Entities;
+using static ShopOnline.Api.Entities.User;
 
 namespace ShopOnline.Api.Data
 {
@@ -318,8 +319,12 @@ namespace ShopOnline.Api.Data
                 IconCSS = "fas fa-shoe-prints"
             });
 
-            modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
-
+            var userEntity = modelBuilder.Entity<User>();
+            userEntity.HasIndex(x => x.Email).IsUnique();
+            userEntity.Property(x => x.Role).HasConversion(
+               v => v.ToString(),
+               v => (UserRole)Enum.Parse(typeof(UserRole), v)
+               );
         }
 
         public DbSet<Cart> Carts { get; set; }

@@ -53,7 +53,8 @@ namespace ShopOnline.Api.Repositories
                 {
                     UserName = registerDto.UserName,
                     Email = registerDto.Email,
-                    PasswordSalt = PasswordHasher.GenerateSalt()
+                    PasswordSalt = PasswordHasher.GenerateSalt(),
+                    Role = User.UserRole.User
                 };
 
                 newUser.PasswordHash = PasswordHasher.ComputeHash(registerDto.Password, newUser.PasswordSalt, pepper, iteration);
