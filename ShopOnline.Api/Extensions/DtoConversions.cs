@@ -84,7 +84,15 @@ namespace ShopOnline.Api.Extensions
 
         public static UserDto ConvertToDto(this User user, string token, int exprisIn)
         {
-            return new UserDto(user.Id, user.UserName, user.Email, nameof(user.Role), token, exprisIn, DateTime.Now);
+            return new UserDto 
+                { 
+                    Id = user.Id,
+                    UserName = user.UserName, 
+                    Email = user.Email, 
+                    Role = nameof(user.Role),
+                    Token = token, 
+                    ExpiresIn = exprisIn 
+                };
         }
     }
 }

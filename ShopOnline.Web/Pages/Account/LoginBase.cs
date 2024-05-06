@@ -5,13 +5,20 @@ using ShopOnline.Models.Dtos;
 using ShopOnline.Web.Services.Contracts;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components.Authorization;
+using ShopOnline.Web.Authentication;
 
 namespace ShopOnline.Web.Pages
 {
     public class LoginBase : ComponentBase
     {
-        [CascadingParameter]
-        public HttpContext? HttpContext {  get; set; } 
+
+        [Inject]
+        public IJSRuntime Js {  get; set; }
+
+        [Inject]
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         [Parameter]
         public string Email { get; set; }
@@ -39,10 +46,18 @@ namespace ShopOnline.Web.Pages
 
                 if(userDto != null)
                 {
-                    ManageUserService.SetCurrentUser(userDto);
+                    var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+                    await customAuthenticationStateProvider.UpdateAuthenticationState(userDto);
+                    NavigationManager.NavigateTo("/");
+
+                    //ManageUserService.SetCurrentUser(userDto);
+                }
+                else
+                {
+                    await Js.InvokeVoidAsync("alert", "Invalid Email or Password");
+                    return;
                 }
 
-                NavigationManager.NavigateTo("/");
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿@page "/ShoppingCart"
 @inherits ShoppingCartBase
+@attribute [Authorize(Roles = "Admin,User")]
 
 @if(ShoppingCartItems == null && ErrorMessage == null)
 {
