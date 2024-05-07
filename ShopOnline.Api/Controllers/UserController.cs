@@ -64,6 +64,7 @@ namespace ShopOnline.Api.Controllers
 
                 var claimsIdentity = new ClaimsIdentity( new List<Claim>
                 {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, nameof(user.Role)),
                     new Claim(ClaimTypes.Email, user.Email)

@@ -1,6 +1,9 @@
 ﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using ShopOnline.Models.Dtos;
+using ShopOnline.Web.Authentication;
 using ShopOnline.Web.Services.Contracts;
+using System.Security.Claims;
 
 namespace ShopOnline.Web.Services
 {
@@ -9,13 +12,15 @@ namespace ShopOnline.Web.Services
         private readonly ILocalStorageService localStorageService;
         private readonly IShoppingCartService shoppingCartService;
         private readonly IManageUserService manageUserService;
+        private readonly CustomAuthenticationStateProvider customAuthenticationStateProvider;
         private const string key = "CartItemCollection";
 
-        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService)
+        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService, CustomAuthenticationStateProvider customAuthenticationStateProvider)
         {
             this.localStorageService = localStorageService;
             this.shoppingCartService = shoppingCartService;
             this.manageUserService = manageUserService;
+            this.customAuthenticationStateProvider = customAuthenticationStateProvider;
         }
 
         public async Task<List<CartItemDto>> GetCollection()
@@ -37,9 +42,17 @@ namespace ShopOnline.Web.Services
         {
             List<CartItemDto> shoppingCartCollection = new List<CartItemDto>();
 
-            if (this.manageUserService.GetCurrentUser() != null)
+            /*if (this.manageUserService.GetCurrentUser() != null)
             {
                 shoppingCartCollection = await this.shoppingCartService.GetItems(this.manageUserService.GetCurrentUser().Id);
+            }*/
+
+            var user = (await customAuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier);
+
+            if(userId != null)
+            {
+                shoppingCartCollection = await this.shoppingCartService.GetItems(Int32.Parse(userId.Value));
             }
 
             if (shoppingCartCollection != null)

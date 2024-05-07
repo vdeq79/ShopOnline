@@ -1,7 +1,8 @@
 ﻿using Blazored.LocalStorage;
 using ShopOnline.Models.Dtos;
+using ShopOnline.Web.Services.Contracts;
 
-namespace ShopOnline.Web.Services.Contracts
+namespace ShopOnline.Web.Services
 {
     public class ManageProductsLocalStorageService : IManageProductsLocalStorageService
     {
@@ -16,21 +17,21 @@ namespace ShopOnline.Web.Services.Contracts
         }
         public async Task<IEnumerable<ProductDto>> GetCollection()
         {
-            return await this.localStorageService.GetItemAsync<IEnumerable<ProductDto>>(key) ?? await AddCollection();
+            return await localStorageService.GetItemAsync<IEnumerable<ProductDto>>(key) ?? await AddCollection();
         }
 
         public async Task RemoveCollection()
         {
-            await this.localStorageService.RemoveItemAsync(key);
+            await localStorageService.RemoveItemAsync(key);
         }
 
         private async Task<IEnumerable<ProductDto>> AddCollection()
         {
-            var productCollection = await this.productService.GetItems();
+            var productCollection = await productService.GetItems();
 
-            if(productCollection != null)
+            if (productCollection != null)
             {
-                await this.localStorageService.SetItemAsync(key, productCollection);
+                await localStorageService.SetItemAsync(key, productCollection);
             }
 
             return productCollection;

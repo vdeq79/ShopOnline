@@ -29,7 +29,7 @@ namespace ShopOnline.Web.Authentication
                 }
 
                 var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-                {
+                {   new Claim(ClaimTypes.NameIdentifier, userSession.Id.ToString()),
                     new Claim(ClaimTypes.Name, userSession.UserName),
                     new Claim(ClaimTypes.Email, userSession.Email),
                     new Claim(ClaimTypes.Role, userSession.Role)
@@ -52,7 +52,7 @@ namespace ShopOnline.Web.Authentication
             if (userSession != null)
             {
                 claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-                {
+                {   new Claim(ClaimTypes.NameIdentifier, userSession.Id.ToString()),
                     new Claim(ClaimTypes.Name, userSession.UserName),
                     new Claim(ClaimTypes.Email, userSession.Email),
                     new Claim(ClaimTypes.Role, userSession.Role)
