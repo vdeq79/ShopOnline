@@ -89,7 +89,7 @@ namespace ShopOnline.Api.Extensions
                     Id = user.Id,
                     UserName = user.UserName, 
                     Email = user.Email, 
-                    Role = nameof(user.Role),
+                    Role = ((User.UserRole)user.Role).ToString(),
                     Token = token, 
                     ExpiresIn = exprisIn 
                 };

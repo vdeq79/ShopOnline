@@ -15,7 +15,7 @@ namespace ShopOnline.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository userRepository;
-        public const string JWT_SECURITY_KEY = "Random_key";
+        public const string JWT_SECURITY_KEY = "this is my custom Secret key for authentication";
         private const int JWT_TOKEN_VALIDITY_MINS = 20;
 
         public UserController(IUserRepository userRepository)

@@ -321,10 +321,7 @@ namespace ShopOnline.Api.Data
 
             var userEntity = modelBuilder.Entity<User>();
             userEntity.HasIndex(x => x.Email).IsUnique();
-            userEntity.Property(x => x.Role).HasConversion(
-               v => v.ToString(),
-               v => (UserRole)Enum.Parse(typeof(UserRole), v)
-               );
+            userEntity.Property(x => x.Role).HasConversion<int>();
         }
 
         public DbSet<Cart> Carts { get; set; }

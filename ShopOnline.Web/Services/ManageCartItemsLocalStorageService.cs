@@ -12,15 +12,15 @@ namespace ShopOnline.Web.Services
         private readonly ILocalStorageService localStorageService;
         private readonly IShoppingCartService shoppingCartService;
         private readonly IManageUserService manageUserService;
-        private readonly CustomAuthenticationStateProvider customAuthenticationStateProvider;
+        private readonly AuthenticationStateProvider authenticationStateProvider;
         private const string key = "CartItemCollection";
 
-        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService, CustomAuthenticationStateProvider customAuthenticationStateProvider)
+        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService, AuthenticationStateProvider authenticationStateProvider)
         {
             this.localStorageService = localStorageService;
             this.shoppingCartService = shoppingCartService;
             this.manageUserService = manageUserService;
-            this.customAuthenticationStateProvider = customAuthenticationStateProvider;
+            this.authenticationStateProvider = authenticationStateProvider;
         }
 
         public async Task<List<CartItemDto>> GetCollection()
@@ -47,7 +47,7 @@ namespace ShopOnline.Web.Services
                 shoppingCartCollection = await this.shoppingCartService.GetItems(this.manageUserService.GetCurrentUser().Id);
             }*/
 
-            var user = (await customAuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
             var userId = user.FindFirst(ClaimTypes.NameIdentifier);
 
             if(userId != null)

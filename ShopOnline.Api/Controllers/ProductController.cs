@@ -20,7 +20,6 @@ namespace ShopOnline.Api.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetItems()
         {
             try

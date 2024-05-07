@@ -53,7 +53,7 @@ namespace ShopOnline.Web.Pages
                 {
                     int index = ShoppingCartItems.FindIndex(c => c.Id == cartItemDto.Id);
 
-                    Console.WriteLine(ShoppingCartItems.First().Qty);
+                    //Console.WriteLine(ShoppingCartItems.First().Qty);
 
                     if (index != -1)
                     {
@@ -64,7 +64,7 @@ namespace ShopOnline.Web.Pages
                         ShoppingCartItems.Add(cartItemDto);
                     }
 
-                    Console.WriteLine(ShoppingCartItems.First().Qty);
+                    //Console.WriteLine(ShoppingCartItems.First().Qty);
 
                     await ManageCartItemsLocalStorageService.SaveCollection(ShoppingCartItems);
                 }

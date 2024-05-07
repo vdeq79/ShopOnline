@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using ShopOnline.Models.Dtos;
 using ShopOnline.Web.Authentication;
@@ -11,7 +12,7 @@ namespace ShopOnline.Web.Pages
     public class ShoppingCartBase:ComponentBase
     {
         [Inject]
-        public CustomAuthenticationStateProvider CustomAuthenticationStateProvider { get; set; }
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -34,7 +35,7 @@ namespace ShopOnline.Web.Pages
         {
             try
             {
-                var token = await CustomAuthenticationStateProvider.GetToken();
+                var token = await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).GetToken();
 
                 if(!string.IsNullOrEmpty(token))
                 {

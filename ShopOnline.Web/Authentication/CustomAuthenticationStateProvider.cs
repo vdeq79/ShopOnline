@@ -47,27 +47,17 @@ namespace ShopOnline.Web.Authentication
 
         public async Task UpdateAuthenticationState(UserDto? userSession)
         {
-            ClaimsPrincipal claimsPrincipal;
-
             if (userSession != null)
             {
-                claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-                {   new Claim(ClaimTypes.NameIdentifier, userSession.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userSession.UserName),
-                    new Claim(ClaimTypes.Email, userSession.Email),
-                    new Claim(ClaimTypes.Role, userSession.Role)
-                }));
-
                 userSession.ExpiryTimeStamp = DateTime.Now.AddSeconds(userSession.ExpiresIn);
                 await _sessionStorageService.SaveItemEncryptedAsync("UserSession", userSession);
             }
             else
             {
-                claimsPrincipal = _anonymous;
                 await _sessionStorageService.RemoveItemAsync("UserSession");
             }
 
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
         public async Task<string> GetToken()
