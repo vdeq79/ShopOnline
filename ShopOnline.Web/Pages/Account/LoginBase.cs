@@ -18,7 +18,7 @@ namespace ShopOnline.Web.Pages
         public IJSRuntime Js {  get; set; }
 
         [Inject]
-        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        public CustomAuthenticationStateProvider CustomAuthenticationStateProvider { get; set; }
 
         [Parameter]
         public string Email { get; set; }
@@ -46,8 +46,7 @@ namespace ShopOnline.Web.Pages
 
                 if(userDto != null)
                 {
-                    var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
-                    await customAuthenticationStateProvider.UpdateAuthenticationState(userDto);
+                    await CustomAuthenticationStateProvider.UpdateAuthenticationState(userDto);
                     NavigationManager.NavigateTo("/");
 
                     //ManageUserService.SetCurrentUser(userDto);

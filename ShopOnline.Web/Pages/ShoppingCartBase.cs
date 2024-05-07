@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using ShopOnline.Models.Dtos;
+using ShopOnline.Web.Authentication;
 using ShopOnline.Web.Services;
 using ShopOnline.Web.Services.Contracts;
 using System.Globalization;
@@ -9,6 +10,11 @@ namespace ShopOnline.Web.Pages
 {
     public class ShoppingCartBase:ComponentBase
     {
+        [Inject]
+        public CustomAuthenticationStateProvider CustomAuthenticationStateProvider { get; set; }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
         [Inject]
         public IJSRuntime Js {  get; set; }
@@ -28,8 +34,17 @@ namespace ShopOnline.Web.Pages
         {
             try
             {
-                ShoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();
-                CartChanged();
+                var token = await CustomAuthenticationStateProvider.GetToken();
+
+                if(!string.IsNullOrEmpty(token))
+                {
+                    ShoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();
+                    CartChanged();
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/Login");
+                }
 
             }
             catch(Exception ex) 
