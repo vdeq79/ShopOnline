@@ -13,7 +13,9 @@ namespace ShopOnline.Web.Services
         private readonly IShoppingCartService shoppingCartService;
         private readonly IManageUserService manageUserService;
         private readonly AuthenticationStateProvider authenticationStateProvider;
-        private const string key = "CartItemCollection";
+        private const string CartItemCollection = "CartItemCollection";
+        private const string CartId = "CartId";
+
 
         public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService, AuthenticationStateProvider authenticationStateProvider)
         {
@@ -23,19 +25,24 @@ namespace ShopOnline.Web.Services
             this.authenticationStateProvider = authenticationStateProvider;
         }
 
+        public async Task<int> GetCartId()
+        {
+            return await this.localStorageService.GetItemAsync<int?>(CartId) ?? await AddCartId();
+        }
+
         public async Task<List<CartItemDto>> GetCollection()
         {
-            return await this.localStorageService.GetItemAsync<List<CartItemDto>>(key) ?? await AddCollection();
+            return await this.localStorageService.GetItemAsync<List<CartItemDto>>(CartItemCollection) ?? await AddCollection();
         }
 
         public async Task RemoveCollection()
         {
-            await this.localStorageService.RemoveItemAsync(key);
+            await this.localStorageService.RemoveItemAsync(CartItemCollection);
         }
 
         public async Task SaveCollection(List<CartItemDto> cartItemDtos)
         {
-            await this.localStorageService.SetItemAsync(key, cartItemDtos);
+            await this.localStorageService.SetItemAsync(CartItemCollection, cartItemDtos);
         }
 
         private async Task<List<CartItemDto>> AddCollection()
@@ -57,10 +64,32 @@ namespace ShopOnline.Web.Services
 
             if (shoppingCartCollection != null)
             {
-                await this.localStorageService.SetItemAsync(key, shoppingCartCollection);
+                await this.localStorageService.SetItemAsync(CartItemCollection, shoppingCartCollection);
             }
 
             return shoppingCartCollection;
         }
+
+        private async Task<int> AddCartId()
+        {
+            int cartId = -1;
+
+            var user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userId != null)
+            {
+                cartId = await this.shoppingCartService.GetCartId(Int32.Parse(userId.Value));
+            }
+
+            if (cartId != -1)
+            {
+                await this.localStorageService.SetItemAsync(CartId, cartId);
+            }
+
+            return cartId;
+        }
+
+
     }
 }

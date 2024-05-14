@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopOnline.Api.Extensions;
 using ShopOnline.Api.Repositories.Contracts;
@@ -18,6 +19,30 @@ namespace ShopOnline.Api.Controllers
             this.shoppingCartRepository = shoppingCartRepository;
             this.productRepository = productRepository;
         }
+
+
+        [HttpGet]
+        [Route("{userId}/GetCartId")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<ActionResult<int>> GetCartId(int userId)
+        {
+            try
+            {
+                var cartId = await this.shoppingCartRepository.GetCartId(userId);
+                if(cartId == -1)
+                {
+                    return NoContent();
+                }
+
+                return Ok(cartId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
+        }
+
 
         [HttpGet]
         [Route("{userId}/GetItems")]

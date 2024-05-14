@@ -19,6 +19,32 @@ namespace ShopOnline.Web.Services
             this.httpClient = httpClient;
         }
 
+        public async Task<int> GetCartId(int userId)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"api/ShoppingCart/{userId}/GetCartId");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return -1;
+                    }
+                    return await response.Content.ReadFromJsonAsync<int>();
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Http status:{response.StatusCode} Message:{message}");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<CartItemDto> AddItem(CartItemToAddDto cartItemToAddDto)
         {
             try

@@ -88,6 +88,7 @@ namespace ShopOnline.Api.Repositories
                           }).SingleOrDefaultAsync();
         }
 
+
         public async Task<IEnumerable<CartItem>> GetItems(int userId)
         {
             return await (from cart in shopOnlineDbContext.Carts
@@ -116,6 +117,23 @@ namespace ShopOnline.Api.Repositories
             return null;
         }
 
+        public async Task<int> GetCartId(int userId)
+        {
+            var cart = await this.shopOnlineDbContext.Carts.SingleOrDefaultAsync(c => c.UserId == userId);
 
+            if(cart != null)
+            {
+                return cart.Id;
+            }
+            else
+            {
+                var newCart = new Cart { UserId = userId };
+                var result = await shopOnlineDbContext.Carts.AddAsync(newCart);
+                await shopOnlineDbContext.SaveChangesAsync();
+                return result.Entity.Id;
+            }
+
+            return -1;
+        }
     }
 }

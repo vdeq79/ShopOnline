@@ -26,6 +26,7 @@ namespace ShopOnline.Web.Pages
         [Inject]
         public IManageCartItemsLocalStorageService ManageCartItemsLocalStorageService { get; set; }
 
+        public int CartId { get; set; }
         public List<CartItemDto> ShoppingCartItems { get; set; }
         public string ErrorMessage { get; set; }
         protected string TotalPrice { get; set; }
@@ -39,6 +40,7 @@ namespace ShopOnline.Web.Pages
 
                 if(!string.IsNullOrEmpty(token))
                 {
+                    CartId = await ManageCartItemsLocalStorageService.GetCartId();
                     ShoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();
                     CartChanged();
                 }

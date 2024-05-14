@@ -27,6 +27,8 @@ namespace ShopOnline.Web.Pages
 
         public ProductDto Product { get; set; }
         public string ErrorMessage { get; set; }
+
+        public int CartId { get; set; }
         private List<CartItemDto> ShoppingCartItems { get; set; }
 
 
@@ -34,6 +36,7 @@ namespace ShopOnline.Web.Pages
         {
             try
             {
+                CartId = await ManageCartItemsLocalStorageService.GetCartId();
                 ShoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();
                 Product = await GetProductById(Id);
             }
