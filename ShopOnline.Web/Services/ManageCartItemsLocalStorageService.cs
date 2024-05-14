@@ -90,6 +90,9 @@ namespace ShopOnline.Web.Services
             return cartId;
         }
 
-
+        public async Task RemoveCartId()
+        {
+            await this.localStorageService.RemoveItemAsync(CartId);
+        }
     }
 }

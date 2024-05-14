@@ -8,5 +8,6 @@ namespace ShopOnline.Web.Services.Contracts
         Task<List<CartItemDto>> GetCollection();
         Task SaveCollection(List<CartItemDto> cartItemDtos);
         Task RemoveCollection();
+        Task RemoveCartId();
     }
 }

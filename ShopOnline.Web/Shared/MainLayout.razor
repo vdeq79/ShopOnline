@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IManageCartItemsLocalStorageService manageCartItemsLocalStorageService
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 
@@ -32,6 +33,7 @@
     {
         var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
         await customAuthenticationStateProvider.UpdateAuthenticationState(null);
+        await manageCartItemsLocalStorageService.RemoveCartId();
         navigationManager.NavigateTo("/");
     }
 }
