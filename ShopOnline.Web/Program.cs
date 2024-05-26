@@ -24,7 +24,6 @@ builder.Services.AddBlazoredSessionStorage();
 
 builder.Services.AddScoped<IManageProductsLocalStorageService, ManageProductsLocalStorageService>();
 builder.Services.AddScoped<IManageCartItemsLocalStorageService, ManageCartItemsLocalStorageService>();
-builder.Services.AddScoped<IManageUserService, ManageUserService>();
 
 builder.Services.AddAuthorizationCore();
 

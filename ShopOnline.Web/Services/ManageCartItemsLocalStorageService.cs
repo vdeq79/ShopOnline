@@ -11,17 +11,14 @@ namespace ShopOnline.Web.Services
     {
         private readonly ILocalStorageService localStorageService;
         private readonly IShoppingCartService shoppingCartService;
-        private readonly IManageUserService manageUserService;
         private readonly AuthenticationStateProvider authenticationStateProvider;
         private const string CartItemCollection = "CartItemCollection";
         private const string CartId = "CartId";
 
-
-        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, IManageUserService manageUserService, AuthenticationStateProvider authenticationStateProvider)
+        public ManageCartItemsLocalStorageService(ILocalStorageService localStorageService, IShoppingCartService shoppingCartService, AuthenticationStateProvider authenticationStateProvider)
         {
             this.localStorageService = localStorageService;
             this.shoppingCartService = shoppingCartService;
-            this.manageUserService = manageUserService;
             this.authenticationStateProvider = authenticationStateProvider;
         }
 
@@ -48,18 +45,12 @@ namespace ShopOnline.Web.Services
         private async Task<List<CartItemDto>> AddCollection()
         {
             List<CartItemDto> shoppingCartCollection = new List<CartItemDto>();
-
-            /*if (this.manageUserService.GetCurrentUser() != null)
-            {
-                shoppingCartCollection = await this.shoppingCartService.GetItems(this.manageUserService.GetCurrentUser().Id);
-            }*/
-
-            var user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
-            var userId = user.FindFirst(ClaimTypes.NameIdentifier);
+            int? userId = await GetUserId();
 
             if(userId != null)
             {
-                shoppingCartCollection = await this.shoppingCartService.GetItems(Int32.Parse(userId.Value));
+                var token = await ((CustomAuthenticationStateProvider)authenticationStateProvider).GetToken();
+                shoppingCartCollection = await this.shoppingCartService.GetItems(userId.Value, token);
             }
 
             if (shoppingCartCollection != null)
@@ -73,13 +64,12 @@ namespace ShopOnline.Web.Services
         private async Task<int> AddCartId()
         {
             int cartId = -1;
-
-            var user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
-            var userId = user.FindFirst(ClaimTypes.NameIdentifier);
+            int? userId = await GetUserId();
 
             if (userId != null)
             {
-                cartId = await this.shoppingCartService.GetCartId(Int32.Parse(userId.Value));
+                var token = await ((CustomAuthenticationStateProvider)authenticationStateProvider).GetToken();
+                cartId = await this.shoppingCartService.GetCartId(userId.Value, token);
             }
 
             if (cartId != -1)
@@ -93,6 +83,20 @@ namespace ShopOnline.Web.Services
         public async Task RemoveCartId()
         {
             await this.localStorageService.RemoveItemAsync(CartId);
+        }
+
+        private async Task<int?> GetUserId()
+        {
+
+            var user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userId != null)
+            {
+                return Int32.Parse(userId.Value);
+            }
+
+            return null;
         }
     }
 }

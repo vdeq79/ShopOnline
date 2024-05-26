@@ -46,6 +46,7 @@ namespace ShopOnline.Api.Controllers
 
         [HttpGet]
         [Route("{userId}/GetItems")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<IEnumerable<CartItemDto>>> GetItems(int userId)
         {
             try

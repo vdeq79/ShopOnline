@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ShopOnline.Models.Dtos;
 using ShopOnline.Web.Services.Contracts;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -19,10 +20,11 @@ namespace ShopOnline.Web.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<int> GetCartId(int userId)
+        public async Task<int> GetCartId(int userId, string token)
         {
             try
             {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
                 var response = await httpClient.GetAsync($"api/ShoppingCart/{userId}/GetCartId");
 
                 if (response.IsSuccessStatusCode)
@@ -72,10 +74,11 @@ namespace ShopOnline.Web.Services
             }
         }
 
-        public async Task<List<CartItemDto>> GetItems(int userId)
+        public async Task<List<CartItemDto>> GetItems(int userId, string token)
         {
             try
             {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
                 var response = await httpClient.GetAsync($"api/ShoppingCart/{userId}/GetItems");
 
                 if (response.IsSuccessStatusCode)

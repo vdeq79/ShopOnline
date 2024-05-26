@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
+@attribute [Authorize(Roles = "User,Admin")]
 @inject IShoppingCartService shoppingCartService
-@inject IManageUserService manageUserService
 
 <AuthorizeView Roles="Admin,User">
     <Authorized>

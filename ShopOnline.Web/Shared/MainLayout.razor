@@ -9,18 +9,18 @@
     </div>
 
     <main>
-        <AuthorizeView>
-            <Authorized>
-                <CartMenu />
-                <a @onclick="Logout" href="javascript:void(0)">Logout</a>
-            </Authorized>
-            <NotAuthorized>
-                <div class="top-row px-4">
-                    <a href="Login">Login</a>
-                </div>
-            </NotAuthorized>
-
-        </AuthorizeView>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <b>@context.User.Identity.Name</b>
+                    <CartMenu />
+                    <a @onclick="Logout" href="javascript:void(0)">Logout</a>
+                </Authorized>
+                <NotAuthorized>
+                        <a href="Login">Login</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
 
         <article class="content px-4">
             @Body

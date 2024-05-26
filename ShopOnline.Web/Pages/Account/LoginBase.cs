@@ -30,9 +30,6 @@ namespace ShopOnline.Web.Pages
         public IUserService UserService { get; set; }
 
         [Inject]
-        public IManageUserService ManageUserService { get; set; }
-
-        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         public string ErrorMessage { get; set; }
